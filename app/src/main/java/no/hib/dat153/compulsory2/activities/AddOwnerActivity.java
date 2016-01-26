@@ -42,6 +42,9 @@ import no.hib.dat153.compulsory2.utils.Constants;
 
 public class AddOwnerActivity extends AppCompatActivity {
 
+    //This variable was created on the ubuntu computer.
+    private String lol = "Test";
+
     private ApplicationDatabase myDB;
 
     private EditText editText;
