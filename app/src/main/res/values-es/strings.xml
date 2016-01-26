@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Obligatorio2v1</string>
+    <string name="names">Nombres</string>
+    <string name="images">Imágenes</string>
+    <string name="learn">Modo de aprendizaje</string>
+    <string name="addPerson">Añadir</string>
+    <string name="enterName">Enter person name</string>
+    <string name="imagesLeft">Imágenes dejaron:" "</string>
+    <string name="score">Puntuación:" "</string>
+    <string name="enterNameOf">Escriba el nombre de la persona</string>
+    <string name="submit">Enviar</string>
+    <string name="toMain">De vuelta a la pantalla de inicio</string>
+    <string name="delete">Eliminar persona</string>
+    <string name="toastEmptyLearn">Nada que aprender</string>
+    <string name="toastEnterName">Por favor escribe un nombre</string>
+    <string name="toastTheName">Se toma el nombre" "</string>
+    <string name="toastIsTaken"></string>
+    <string name="toastCameraPermission">Se necesita el permiso de la cámara para usar la cámara</string>
+    <string name="toastWritePermission">Leer/Escribir permiso necesario para guardar la imagen capturada</string>
+    <string name="permissionNotGranted">No se le concedió el permiso</string>
+    <string-array name="scoreActivity">
+        <item>Resultado</item>
+        <item>Felicitaciones!</item>
+        <item>Has anotado" "</item>
+        <item>" "fuerta" "</item>
+        <item>" "posibles puntos</item>
+    </string-array>
+    <string name="buttonScore">Mostrar resultado parcial</string>
+</resources>

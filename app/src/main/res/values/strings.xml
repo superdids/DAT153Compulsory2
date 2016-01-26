@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Compulsory2v1</string>
+    <string name="names">Names</string>
+    <string name="images">Images</string>
+    <string name="learn">Learn mode</string>
+    <string name="addPerson">Add</string>
+    <string name="enterName">Enter person name</string>
+    <string name="imagesLeft">Images left:" "</string>
+    <string name="score">Score:" "</string>
+    <string name="enterNameOf">Enter name of person</string>
+    <string name="submit">Submit</string>
+    <string name="toMain">Back to home screen</string>
+    <string name="delete">Delete person</string>
+    <string name="toastEmptyLearn">Nothing to learn</string>
+    <string name="toastEnterName">Please enter a name</string>
+    <string name="toastTheName">The name" "</string>
+    <string name="toastIsTaken">" "is taken</string>
+    <string name="toastCameraPermission">Camera permission is needed to use the camera</string>
+    <string name="toastWritePermission">Read/Write permission needed in order to save captured image</string>
+    <string name="permissionNotGranted">Permission was not granted</string>
+    <string-array name="scoreActivity">
+        <item>Results</item>
+        <item>Congratulations!</item>
+        <item>You scored" "</item>
+        <item>" "out of" "</item>
+        <item>" "possible points</item>
+    </string-array>
+    <string name="buttonScore">Show score now</string>
+</resources>

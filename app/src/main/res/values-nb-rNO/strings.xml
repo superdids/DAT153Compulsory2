@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Obligatorisk2v1</string>
+    <string name="names">Navn</string>
+    <string name="images">Bilder</string>
+    <string name="learn">Læremodus</string>
+    <string name="addPerson">Legg til</string>
+    <string name="enterName">Skriv inn navn</string>
+    <string name="imagesLeft">Gjenstående bilder:" "</string>
+    <string name="score">Poengsum:" "</string>
+    <string name="enterNameOf">Skriv inn personens navn</string>
+    <string name="submit">Bekreft</string>
+    <string name="toMain">Tilbake til hovedvindu</string>
+    <string name="delete">Fjern person</string>
+    <string name="toastEmptyLearn">Ingenting å lære</string>
+    <string name="toastEnterName">Vennligst skriv inn et navn</string>
+    <string name="toastTheName">Navnet" "</string>
+    <string name="toastIsTaken">" "er tatt</string>
+    <string name="toastCameraPermission">Enheten trenger kamera rettigheter til å bruke kamera</string>
+    <string name="toastWritePermission">Enheten trenger les/skriv rettigheter til å lagre tatt bilde</string>
+    <string name="permissionNotGranted">Tillatelse ble ikke innvilget</string>
+    <string-array name="scoreActivity">
+        <item>Resultat</item>
+        <item>Gratulerer!</item>
+        <item>Du fikk" "</item>
+        <item>" "av" "</item>
+        <item>" "mulige poeng</item>
+    </string-array>
+    <string name="buttonScore">Vis resultat nå</string>
+</resources>
