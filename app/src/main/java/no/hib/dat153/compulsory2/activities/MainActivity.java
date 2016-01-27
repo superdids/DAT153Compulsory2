@@ -91,13 +91,6 @@ public class MainActivity extends AppCompatActivity {
 
         myDB = new ApplicationDatabase(this, null, null, 1);
 
-        owner = getSharedPreferences(
-                Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
-
-        if(owner.getString(Constants.OWNER, null) == null)
-            startActivity(new Intent(MainActivity.this,
-                    AddOwnerActivity.class));
-
         Resources resources = getResources();
         Uri uri;
         for(int x = 0; x < names.length; x++) {
@@ -106,6 +99,20 @@ public class MainActivity extends AppCompatActivity {
                 myDB.addPerson(new Person(names[x], uri.toString()));
             }
         }
+
+        owner = getSharedPreferences(
+                Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+       //SharedPreferences.Editor editor = owner.edit();
+        //editor.clear(); editor.commit();
+
+        if(owner.getString(Constants.OWNER, null) == null)
+            startActivity(new Intent(MainActivity.this,
+                    AddOwnerActivity.class));
+        //if(owner.getAll().size() == 0)
+         //   startActivity(new Intent(MainActivity.this,
+           //       AddOwnerActivity.class));
+
     }
 
     /*@Override
@@ -113,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if(owner.getString(Constants.OWNER, null) == null)
             startActivity(new Intent(MainActivity.this, AddOwnerActivity.class));
-
     }*/
 
     /**

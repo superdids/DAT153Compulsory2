@@ -2,12 +2,16 @@ package no.hib.dat153.compulsory2.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,6 +22,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
+import no.hib.dat153.compulsory2.R;
 import no.hib.dat153.compulsory2.persistence.Person;
 
 public class ApplicationUtils {
@@ -102,5 +107,48 @@ public class ApplicationUtils {
                 resources.getResourcePackageName(id) + "/" +
                 resources.getResourceTypeName(id) + "/" +
                 resources.getResourceEntryName(id));
+    }
+
+    /**
+     * Retrieves the owner of the application
+     * @param preferences A reference to the shared preferences file
+     *                    to be read.
+     * @return The owner as a Person-instance.
+     */
+    public static Person getOwner(SharedPreferences preferences) {
+        String name = preferences.getString(Constants.OWNER, null);
+        String uriString = preferences.getString(name, null);
+        return new Person(name, uriString);
+    }
+
+    /**
+     * Fills a layout with an image and name corresponding to the
+     * values of a person object.
+     * @param parent The parent layout.
+     * @param context The context of the invoking activity.
+     * @param person The values to be used within the parent layout.
+     * @param identifications The identifiers to an ImageView and a
+     *                        TextView.
+     * @throws Exception If the person contains an invalid Uri value.
+     */
+    public static void generateOwnerView(FrameLayout parent, Context context, Person person,
+                                         int [] identifications) throws Exception {
+        ImageView imageView = (ImageView) parent.findViewById(identifications[0]);
+        Uri uri = Uri.parse(person.getUriString());
+        InputStream stream = context.getContentResolver().openInputStream(uri);
+
+        Bitmap bitmap = BitmapFactory.decodeStream(stream);
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float scaleWidth = (float) width / (float) 150;
+        float scaleHeight = (float) height / (float) 150;
+        float scale = scaleWidth < scaleHeight ? scaleHeight : scaleWidth;
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width / scale),
+                (int) (height / scale), true);
+        imageView.setImageBitmap(bitmap);
+
+        TextView textView = (TextView) parent.findViewById(identifications[1]);
+        textView.setText(person.getName());
     }
 }

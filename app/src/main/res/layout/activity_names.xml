@@ -9,11 +9,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="no.hib.dat153.compulsory2.activities.NamesActivity">
 
+    <FrameLayout
+        android:id="@+id/nameFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameOwnerImagePicture"
+            android:layout_gravity="left" />
+
+        <TextView
+            android:text="TEXT"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameOwnerImageText"
+            android:textColor="@color/buttonText"
+            android:layout_gravity="right|bottom" />
+    </FrameLayout>
+
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/namesListView"
+        android:layout_height="418dp"
+        android:id="@+id/nameListView"
         android:background="@color/colorPrimaryDark"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/nameButtonHome"
+        android:layout_below="@+id/nameFrameLayout" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/toMain"
+        android:textColor="@color/buttonText"
+        android:background="@color/buttonColor"
+        android:onClick="backToMainScreen"
+        android:id="@+id/nameButtonHome"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

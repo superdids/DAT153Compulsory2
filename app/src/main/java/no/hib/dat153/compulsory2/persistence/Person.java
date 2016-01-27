@@ -37,6 +37,17 @@ public class Person {
     }
 
     /**
+     * Checks if a person has empty entries. "Empty" in this context
+     * is defined as either or both of the field variables containing
+     * a null reference.
+     * @return False if either or both field variables contain a null
+     * reference, true otherwise.
+     */
+    public boolean isNotEmpty() {
+        return name != null && uriString != null;
+    }
+
+    /**
      * toString implementation of the person.
      * @return Name of the person.
      */

@@ -1,18 +1,32 @@
 package no.hib.dat153.compulsory2.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import no.hib.dat153.compulsory2.R;
 import no.hib.dat153.compulsory2.adapters.ImageAdapter;
 import no.hib.dat153.compulsory2.persistence.ApplicationDatabase;
 import no.hib.dat153.compulsory2.persistence.Person;
+import no.hib.dat153.compulsory2.utils.ApplicationUtils;
+import no.hib.dat153.compulsory2.utils.Constants;
 
 /**
  * Views clickable items in a ListView. Each item contains an image which is
@@ -49,10 +63,24 @@ public class ImagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_images);
 
+
+
         myDB = new ApplicationDatabase(this, null, null, 1);
         list = myDB.fetchAll();
 
-        ListView listView = (ListView) findViewById(R.id.imagesListView);
+        SharedPreferences preferences = getSharedPreferences(
+                Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        Person owner = ApplicationUtils.getOwner(preferences);
+        if(owner.isNotEmpty()) {
+            try {
+                FrameLayout frameLayout = (FrameLayout) findViewById(R.id.imageFrameLayout);
+                ApplicationUtils.generateOwnerView(frameLayout, getApplicationContext(), owner,
+                        new int [] { R.id.imageOwnerImagePicture, R.id.imageOwnerImageText });
+            } catch(Exception e) { throw new Error(e); }
+        }
+
+        ListView listView = (ListView) findViewById(R.id.imageListView);
         imageAdapter = new ImageAdapter(getApplicationContext(), R.layout.list_view_images,
                 list, myDB);
 
@@ -70,6 +98,8 @@ public class ImagesActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     /**
      * Navigates the user back to the main screen.

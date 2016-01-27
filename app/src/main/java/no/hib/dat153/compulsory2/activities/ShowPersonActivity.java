@@ -1,5 +1,7 @@
 package no.hib.dat153.compulsory2.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import java.io.InputStream;
 import no.hib.dat153.compulsory2.R;
 import no.hib.dat153.compulsory2.persistence.ApplicationDatabase;
 import no.hib.dat153.compulsory2.persistence.Person;
+import no.hib.dat153.compulsory2.utils.Constants;
 
 /**
  * Views an image and its corresponding name. This activity is used
@@ -44,6 +47,16 @@ public class ShowPersonActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
 
         String name = data.getString(NAME);
+      /*  SharedPreferences prefs = getSharedPreferences(
+                Constants.PREFERENCES_FILE, Context.MODE_PRIVATE
+        );*/
+        
+
+        /*String a,b;
+        /*String a,b;
+        if((a = prefs.getString(Constants.OWNER,null)) != null) {
+            person = new Person(a, prefs.getString(a,null));
+        } else*/
         Person person = myDB.find(name);
         assert person != null;
         InputStream stream;

@@ -3,14 +3,17 @@ package no.hib.dat153.compulsory2.activities;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -21,9 +24,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +44,7 @@ import no.hib.dat153.compulsory2.persistence.ApplicationDatabase;
 import no.hib.dat153.compulsory2.persistence.Person;
 import no.hib.dat153.compulsory2.utils.ApplicationUtils;
 import no.hib.dat153.compulsory2.utils.Constants;
+import no.hib.dat153.compulsory2.utils.Validator;
 
 public class AddOwnerActivity extends AppCompatActivity {
 
@@ -53,6 +59,7 @@ public class AddOwnerActivity extends AppCompatActivity {
     private ImageView image;
 
     private String empty, exists, missingImage, pathToCapturedPhoto;
+    private Uri selectedImage;
 
     private static final int REQUEST_CAMERA_RW = 2;
     private static final int PICK_IMAGE = 10;
@@ -68,36 +75,98 @@ public class AddOwnerActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.ownerName);
         editText.addTextChangedListener(makeListener());
 
-        empty = "Please specify a name";
-        exists = "This name already exists";
+        empty = "The name is invalid";
+        exists = "WARNING: this user already exists, and will be deleted upon submission.";
         missingImage = "Missing an image, please add";
 
         errorMessage = (TextView) findViewById(R.id.ownerError);
-        errorMessage.setText(empty);
+
 
         submit = (Button) findViewById(R.id.ownerSubmit);
         image = (ImageView) findViewById(R.id.ownerImage);
     }
 
     public void onSubmitClick(View view) {
+        String result = editText.getText().toString();
+        if(myDB.exists(result)) {
+            Person person = myDB.find(result);
+            myDB.deletePerson(result);
+            removeFile(person);
+        }
+        String uriString = selectedImage.toString();
+        //TODO 2 lines under commented!
+        //Person owner = new Person(result, uriString);
+        //myDB.addPerson(owner);
 
+        //Toast.makeText(getApplicationContext(), "Finish", Toast.LENGTH_LONG).show();
+
+       SharedPreferences settings = getSharedPreferences(
+                Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor manage = settings.edit();
+
+        //make sure the file is empty.
+        manage.clear();
+        manage.putString(Constants.OWNER, result);
+        manage.putString(result, uriString);
+        manage.commit();
+        Intent intent = new Intent(AddOwnerActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * Deletes a file if the user already exists. Drawable resources
+     * will remain on the device.
+     * @param person The person-object containing the imageURI to be deleted.
+     */
+    public void removeFile(Person person) {
+        Uri uri = Uri.parse(person.getUriString());
+        String [] partsOfUri = uri.toString().split("/");
+        int resourceId = getResources().getIdentifier(partsOfUri[partsOfUri.length-1], "drawable", getPackageName());
+        if(resourceId <= 0) {
+            File file = new File(uri.getPath());
+            if(file.exists() && file.delete()) {
+                //After deleting the image, the gallery has to be informed of the removal.
+                //ACTION_MEDIA_MOUNTED is deprecated in API level 14 and above, so there will be
+                //different behaviour based on the API level.
+                if (Build.VERSION.SDK_INT < 14) {
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED,
+                            Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+                } else {
+                    MediaScannerConnection.scanFile(this, new String[]{
+                            Environment.getExternalStorageDirectory().toString()
+                    }, null, new MediaScannerConnection.OnScanCompletedListener() {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri) {
+
+                        }
+                    });
+                }
+            }
+        }
     }
 
     private TextWatcher makeListener() {
         return new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //do nothing
+                errorMessage.setText(empty);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if("".equals(s.toString()))  {
+                if(!Validator.validName(s.toString()))  {
                     errorMessage.setText(empty);
                    showErrors();
                 } else if(myDB.exists(s.toString())) {
                     errorMessage.setText(exists);
-                   showErrors();
+                    if(hasImage()) {
+                        errorMessage.setVisibility(View.VISIBLE);
+                        submit.setVisibility(View.VISIBLE);
+                    } else {
+                        showErrors();
+                    }
                 } else {
                     if(!hasImage()) {
                         errorMessage.setText(missingImage);
@@ -113,6 +182,14 @@ public class AddOwnerActivity extends AppCompatActivity {
                 //do nothing
             }
         };
+    }
+
+    /**
+     * Checks the validity of the input field.
+     * @return False if the input field is empty, true otherwise.
+     */
+    public boolean valid() {
+        return ! "".equals(editText.getText().toString());
     }
 
     private void showErrors() {
@@ -230,7 +307,7 @@ public class AddOwnerActivity extends AppCompatActivity {
         if(resultCode != RESULT_OK
                 || (requestCode != TAKE_PHOTO && requestCode != PICK_IMAGE))
             return;
-        Uri selectedImage;
+        //Uri selectedImage;
         if(requestCode == TAKE_PHOTO) {
            File file = new File(pathToCapturedPhoto);
             try {
@@ -254,6 +331,10 @@ public class AddOwnerActivity extends AppCompatActivity {
             image.setImageBitmap(BitmapFactory.decodeStream(stream));
         } catch (IOException e) {
            throw new Error(e);
+        }
+
+        if(valid()) {
+            submit.setVisibility(View.VISIBLE);
         }
         // EditText editText = (EditText) findViewById(R.id.personName);
        // String name = editText.getText().toString();
