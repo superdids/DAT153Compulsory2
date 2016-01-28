@@ -48,9 +48,6 @@ import no.hib.dat153.compulsory2.utils.Validator;
 
 public class AddOwnerActivity extends AppCompatActivity {
 
-    //This variable was created on the ubuntu computer.
-    private String lol = "Test";
-
     private ApplicationDatabase myDB;
 
     private EditText editText;
@@ -58,7 +55,7 @@ public class AddOwnerActivity extends AppCompatActivity {
     private Button submit;
     private ImageView image;
 
-    private String empty, exists, missingImage, pathToCapturedPhoto;
+    private String invalid , missingImage, pathToCapturedPhoto, resumedToScreen;
     private Uri selectedImage;
 
     private static final int REQUEST_CAMERA_RW = 2;
@@ -73,26 +70,36 @@ public class AddOwnerActivity extends AppCompatActivity {
         myDB = new ApplicationDatabase(this, null, null, 1);
 
         editText = (EditText) findViewById(R.id.ownerName);
-        editText.addTextChangedListener(makeListener());
+        editText.addTextChangedListener(textWatcher);
 
-        empty = "The name is invalid";
-        exists = "WARNING: this user already exists, and will be deleted upon submission.";
+        invalid = "The name is invalid";
         missingImage = "Missing an image, please add";
+        resumedToScreen = "You need to register before you can do anything else.";
 
         errorMessage = (TextView) findViewById(R.id.ownerError);
-
+        errorMessage.setText(invalid);
+        errorMessage.setVisibility(View.VISIBLE);
 
         submit = (Button) findViewById(R.id.ownerSubmit);
         image = (ImageView) findViewById(R.id.ownerImage);
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+
+        if(intent.hasExtra(Constants.MESSAGE_OWNER_NOT_ADDED)
+                && extras.getBoolean(Constants.MESSAGE_OWNER_NOT_ADDED, false)) {
+            Toast.makeText(getApplicationContext(), resumedToScreen, Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onSubmitClick(View view) {
         String result = editText.getText().toString();
-        if(myDB.exists(result)) {
-            Person person = myDB.find(result);
-            myDB.deletePerson(result);
-            removeFile(person);
-        }
+        //TODO removed code for deleting database entry
+        //if(myDB.exists(result)) {
+         //   Person person = myDB.find(result);
+         //   myDB.deletePerson(result);
+         //   removeFile(person);
+        //}
         String uriString = selectedImage.toString();
         //TODO 2 lines under commented!
         //Person owner = new Person(result, uriString);
@@ -147,42 +154,33 @@ public class AddOwnerActivity extends AppCompatActivity {
         }
     }
 
-    private TextWatcher makeListener() {
-        return new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                errorMessage.setText(empty);
-            }
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            //do nothing
+        }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!Validator.validName(s.toString()))  {
-                    errorMessage.setText(empty);
-                   showErrors();
-                } else if(myDB.exists(s.toString())) {
-                    errorMessage.setText(exists);
-                    if(hasImage()) {
-                        errorMessage.setVisibility(View.VISIBLE);
-                        submit.setVisibility(View.VISIBLE);
-                    } else {
-                        showErrors();
-                    }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if(!Validator.validName(s.toString()))  {
+                errorMessage.setText(invalid);
+                showErrors();
+            } else {
+                if(!hasImage()) {
+                    errorMessage.setText(missingImage);
+                    showErrors();
                 } else {
-                    if(!hasImage()) {
-                        errorMessage.setText(missingImage);
-                        showErrors();
-                    } else {
-                        hideErrors();
-                    }
+                    hideErrors();
                 }
             }
+        }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                //do nothing
-            }
-        };
-    }
+        @Override
+        public void afterTextChanged(Editable s) {
+            //do nothing
+        }
+    };
+
 
     /**
      * Checks the validity of the input field.
@@ -334,6 +332,7 @@ public class AddOwnerActivity extends AppCompatActivity {
         }
 
         if(valid()) {
+            errorMessage.setVisibility(View.INVISIBLE);
             submit.setVisibility(View.VISIBLE);
         }
         // EditText editText = (EditText) findViewById(R.id.personName);

@@ -2,6 +2,7 @@ package no.hib.dat153.compulsory2.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -106,21 +108,40 @@ public class MainActivity extends AppCompatActivity {
        //SharedPreferences.Editor editor = owner.edit();
         //editor.clear(); editor.commit();
 
-        if(owner.getString(Constants.OWNER, null) == null)
+        if(owner.getString(Constants.OWNER, null) == null) {
             startActivity(new Intent(MainActivity.this,
                     AddOwnerActivity.class));
-        //if(owner.getAll().size() == 0)
-         //   startActivity(new Intent(MainActivity.this,
-           //       AddOwnerActivity.class));
-
+            return;
+        } else {
+            FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+            Person person = ApplicationUtils.getOwner(owner);
+            try {
+                ApplicationUtils.generateOwnerView(frameLayout, getApplicationContext(), person,
+                        new int[]{R.id.mainOwnerImage, R.id.mainOwnerText});
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        }
     }
 
-    /*@Override
-    protected void onResume() {
-        super.onResume();
-        if(owner.getString(Constants.OWNER, null) == null)
-            startActivity(new Intent(MainActivity.this, AddOwnerActivity.class));
-    }*/
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if(ApplicationUtils.getOwner(owner).isNotEmpty()) {
+            FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+            Person person = ApplicationUtils.getOwner(owner);
+            try {
+                ApplicationUtils.generateOwnerView(frameLayout, getApplicationContext(), person,
+                        new int[]{R.id.mainOwnerImage, R.id.mainOwnerText});
+            } catch (Exception e) {
+                throw new Error(e);
+            }
+        } else {
+            Intent intent = new Intent(MainActivity.this, AddOwnerActivity.class);
+            intent.putExtra(Constants.MESSAGE_OWNER_NOT_ADDED, true);
+            startActivity(intent);
+        }
+    }
 
     /**
      * Pressing either the "Names", "Images" or "Learn" button, will start

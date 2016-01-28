@@ -10,4 +10,5 @@ public class Constants {
     public static final String GALLERY = "Choose from Gallery";
     public static final String CANCEL = "Cancel";
     public static final String [] OPTIONS = { CAMERA, GALLERY, CANCEL };
+    public static final String MESSAGE_OWNER_NOT_ADDED = "no.hib.dat153.compulsory2.MESSAGE_OWNER_NOT_ADDED";
 }
