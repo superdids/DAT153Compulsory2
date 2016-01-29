@@ -85,11 +85,23 @@
                 android:onClick="onClick" />
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/toMain"
+                android:id="@+id/learnBackToMain"
+                android:background="@color/buttonColor"
+                android:textColor="@color/buttonText"
+                android:onClick="backToMainScreen"
+                android:layout_gravity="bottom"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
             <Button
                 android:layout_width="match_parent"
@@ -98,9 +110,11 @@
                 android:id="@+id/showScore"
                 android:background="@color/buttonColor"
                 android:textColor="@color/buttonText"
-                android:layout_gravity="bottom"
-                android:onClick="onClick"/>
-        </LinearLayout>
+                android:onClick="onClick"
+                android:layout_above="@+id/learnBackToMain"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
 
     </LinearLayout>
 </RelativeLayout>

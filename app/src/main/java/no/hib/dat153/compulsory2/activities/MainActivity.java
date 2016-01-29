@@ -47,16 +47,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1;
 
     private static final int REQUEST_CAMERA_RW = 10;
+    private static final int REQUEST_RW = 11;
 
-    private static final String CAMERA = "Take Photo";
-    private static final String GALLERY = "Choose from Gallery";
-    private static final String CANCEL = "Cancel";
-
-
-    /**
-     * Options which will be presented in an AlertDialog
-     */
-    private String [] options = { CAMERA, GALLERY, CANCEL };
+    private String CAMERA;
+    private String GALLERY;
+    private String CANCEL;
 
     /**
      * Gives information to a camera application where to
@@ -105,7 +100,12 @@ public class MainActivity extends AppCompatActivity {
         owner = getSharedPreferences(
                 Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
 
-       //SharedPreferences.Editor editor = owner.edit();
+        CAMERA = getString(R.string.galleryTakePhoto);
+        GALLERY = getString(R.string.galleryChooseFromGallery);
+        CANCEL = getString(R.string.galleryCancel);
+
+
+        //SharedPreferences.Editor editor = owner.edit();
         //editor.clear(); editor.commit();
 
         if(owner.getString(Constants.OWNER, null) == null) {
@@ -124,9 +124,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+
     @Override
     protected void onRestart() {
         super.onRestart();
+        checkOwnerPermissions();
+    }
+
+    public void checkOwnerPermissions() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                renderOwner();
+            } else {
+                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    String message = getString(R.string.toastWritePermission);
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                }
+                requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_RW);
+            }
+        } else {
+            renderOwner();
+        }
+    }
+
+    public void renderOwner() {
         if(ApplicationUtils.getOwner(owner).isNotEmpty()) {
             FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
             Person person = ApplicationUtils.getOwner(owner);
@@ -206,14 +229,17 @@ public class MainActivity extends AppCompatActivity {
      */
     public void showImageOptions() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-        alertDialog.setTitle("Add a photo:");
-        alertDialog.setItems(options, new DialogInterface.OnClickListener() {
+
+        final String [] OPTIONS = { CAMERA, GALLERY, CANCEL };
+        alertDialog.setTitle(getString(R.string.galleryAddPhoto));
+        alertDialog.setItems(OPTIONS, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(which >= 0 && which < options.length) {
-                    switch (options[which]) {
-                        case CAMERA:
+                if(which >= 0 && which < OPTIONS.length) {
+                    switch (which) {
+                        case 0 :
+
                             //Versions at or above API level 23 (Marshmallow) require runtime permissions
                             //Relevant permissions include CAMERA and WRITE_EXTERNAL.
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -239,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             break;
-                        case GALLERY:
+                        case 1:
                             Intent galleryIntent;
                             //The application crashes with permission denial (MANAGE_DOCUMENTS)
                             //if the API level is at or above 19 (KitKat). No luck with declaring
@@ -282,6 +308,13 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 String message = getResources().getString(R.string.permissionNotGranted);
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        } else if(requestCode == REQUEST_RW) {
+            if(results.length == 1 && results[0] == PackageManager.PERMISSION_GRANTED) {
+                renderOwner();
+            } else {
+                String message = getString(R.string.permissionNotGranted);
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, results);

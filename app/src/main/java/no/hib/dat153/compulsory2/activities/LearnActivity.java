@@ -165,4 +165,10 @@ public class LearnActivity extends AppCompatActivity {
         intent.putExtra(ScoreActivity.TOTAL, total);
         startActivity(intent);
     }
+
+    public void backToMainScreen(View view) {
+        Intent intent = new Intent(LearnActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
 }

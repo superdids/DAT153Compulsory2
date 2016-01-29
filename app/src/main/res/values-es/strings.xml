@@ -10,6 +10,10 @@
     <string name="score">Puntuación:" "</string>
     <string name="enterNameOf">Escriba el nombre de la persona</string>
     <string name="submit">Enviar</string>
+    <string name="galleryAddPhoto">Agregar una foto</string>
+    <string name="galleryTakePhoto">Tomar photo</string>
+    <string name="galleryChooseFromGallery">Elegir de la galería</string>
+    <string name="galleryCancel">Cancelar</string>
     <string name="toMain">De vuelta a la pantalla de inicio</string>
     <string name="delete">Eliminar persona</string>
     <string name="toastEmptyLearn">Nada que aprender</string>

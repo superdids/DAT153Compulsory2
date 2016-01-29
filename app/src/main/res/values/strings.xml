@@ -9,6 +9,10 @@
     <string name="score">Score:" "</string>
     <string name="enterNameOf">Enter name of person</string>
     <string name="submit">Submit</string>
+    <string name="galleryAddPhoto">Add a photo:</string>
+    <string name="galleryTakePhoto">Take Photo</string>
+    <string name="galleryChooseFromGallery">Choose from Gallery</string>
+    <string name="galleryCancel">Cancel</string>
     <string name="toMain">Back to home screen</string>
     <string name="delete">Delete person</string>
     <string name="toastEmptyLearn">Nothing to learn</string>
