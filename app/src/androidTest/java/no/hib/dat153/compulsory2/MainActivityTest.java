@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,14 +24,21 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
+
+     //private MainActivity activity;
     @Rule
     public ActivityTestRule mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+//@Before
+  //public void setup() throws Exception {
+    //activity = getActivity(); // starts the activity with normal lifecycle behaviour
+// }
 
     @Test
     public void testPushingAddButtonNotPromptingDialogUponEmptyInput() {
         String dialogTitle = getString(R.string.galleryAddPhoto);
         onView(withId(R.id.addPerson)).perform(click());
         onView(withText(dialogTitle)).check(doesNotExist());
+
     }
 
     @Test
