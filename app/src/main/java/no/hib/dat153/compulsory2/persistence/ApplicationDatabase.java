@@ -48,6 +48,7 @@ public class ApplicationDatabase extends SQLiteOpenHelper {
         return getWritableDatabase();
     }
 
+
     /**
      * Determines whether an id exists in the database or not.
      * @param name The id being investigated.

@@ -10,6 +10,10 @@
     <string name="score">Poengsum:" "</string>
     <string name="enterNameOf">Skriv inn personens navn</string>
     <string name="submit">Bekreft</string>
+    <string name="galleryAddPhoto">Legg til et bilde:</string>
+    <string name="galleryTakePhoto">Ta bilde</string>
+    <string name="galleryChooseFromGallery">Velg fra galleri</string>
+    <string name="galleryCancel">Avbryt</string>
     <string name="toMain">Tilbake til hovedvindu</string>
     <string name="delete">Fjern person</string>
     <string name="toastEmptyLearn">Ingenting å lære</string>
