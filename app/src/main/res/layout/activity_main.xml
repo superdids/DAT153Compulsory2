@@ -3,111 +3,129 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activities.MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:weightSum="1">
+        android:orientation="vertical">
 
         <FrameLayout
             android:id="@+id/mainFrameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimaryDark"
+            >
 
             <ImageView
+                android:id="@+id/mainOwnerImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/mainOwnerImage"
-                android:layout_gravity="left" />
+                android:layout_gravity="center"
+                />
 
             <TextView
+                android:id="@+id/mainOwnerText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/mainOwnerText"
                 android:textColor="@color/buttonText"
-                android:layout_gravity="right|bottom" />
+                android:textSize="25sp" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@color/buttonColor"
+                android:onClick="onResetOwnerClick"
+                android:text="Change"
+                android:textColor="@color/buttonText"
+                android:textSize="10sp" />
+
 
         </FrameLayout>
 
+
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/names"
             android:id="@+id/names"
-            android:layout_gravity="center_horizontal"
-            android:onClick="onClick"
-            android:background="@color/buttonColor"
-            android:textColor="@color/buttonText" />
-
-        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/images"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10sp"
+            android:background="@color/colorPrimaryDark"
+            android:onClick="onClick"
+            android:text="@string/names"
+            android:textColor="@color/buttonText"
+            android:textSize="20sp" />
+
+        <Button
             android:id="@+id/images"
-            android:layout_gravity="center_horizontal"
-            android:onClick="onClick"
-            android:background="@color/buttonColor"
-            android:textColor="@color/buttonText" />
-
-        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/learn"
-            android:id="@+id/learn"
+            android:layout_below="@id/names"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="10sp"
+            android:background="@color/colorPrimaryDark"
             android:onClick="onClick"
-            android:background="@color/buttonColor"
-            android:textColor="@color/buttonText" />
+            android:text="@string/images"
+            android:textColor="@color/buttonText"
+            android:textSize="20sp" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:id="@+id/learn"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RESET OWNER"
-            android:onClick="onResetOwnerClick"
-            android:background="@color/red"
-            android:id="@+id/button"
-            android:layout_gravity="center_horizontal" />
+            android:layout_below="@id/images"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="10sp"
+            android:background="@color/colorPrimaryDark"
+            android:onClick="onClick"
+            android:text="@string/learn"
+            android:textColor="@color/buttonText"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/addPersonRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:background="@color/colorPrimaryDark"
+        android:gravity="center"
+        android:padding="10dp">
 
         <EditText
+            android:id="@+id/personName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:hint="@string/enterName"
-            android:ems="10"
-            android:id="@+id/personName"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/buttonText"
+            android:ems="10"
+            android:hint="@string/enterName"
+            android:inputType="textPersonName"
+            android:padding="10dp" />
 
         <Button
+            android:id="@+id/addPerson"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/addPerson"
-            android:id="@+id/addPerson"
-            android:background="@color/buttonColor"
             android:layout_alignBottom="@+id/personName"
-            android:layout_toRightOf="@+id/personName"
             android:layout_toEndOf="@+id/personName"
+            android:layout_toRightOf="@+id/personName"
+            android:background="@color/colorPrimary"
             android:onClick="onClick"
+            android:text="@string/addPerson"
             android:textColor="@color/buttonText" />
+
+
     </RelativeLayout>
 </RelativeLayout>

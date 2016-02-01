@@ -19,9 +19,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LearnActivity" />
-        <activity android:name=".activities.ImagesActivity" />
-        <activity android:name=".activities.NamesActivity" />
+        <activity android:name=".activities.LearnActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activities.MainActivity" /></activity>
+
+        <activity android:name=".activities.ImagesActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activities.MainActivity" /></activity>
+
+            />
+        <activity android:name=".activities.NamesActivity">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activities.MainActivity" /></activity>
+
+
         <activity android:name=".activities.ScoreActivity" />
         <activity android:name=".activities.ShowPersonActivity" />
         <activity android:name=".activities.AddOwnerActivity"></activity>
