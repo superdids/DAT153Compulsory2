@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import no.hib.dat153.compulsory2.activities.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -51,19 +52,19 @@ public class MainActivityTest {
     @Test
     public void testPushingNamesButtonPressBackToMain() {
         onView(withId(R.id.names)).perform(click());
-        onView(withId(R.id.nameButtonHome)).perform(click());
+        pressBack();
     }
 
     @Test
     public void testPushingImagesButtonPressBackToMain() {
         onView(withId(R.id.images)).perform(click());
-        onView(withId(R.id.imageButtonHome)).perform(click());
+        pressBack();
     }
 
     @Test
     public void testPushingLearnButtonPressBackToMain() {
         onView(withId(R.id.learn)).perform(click());
-        onView(withId(R.id.learnBackToMain)).perform(click());
+        pressBack();
     }
 
     private static String getString(int id) {
