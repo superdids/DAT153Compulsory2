@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import no.hib.dat153.compulsory2.R;
 import no.hib.dat153.compulsory2.persistence.ApplicationDatabase;
 import no.hib.dat153.compulsory2.persistence.Person;
+import no.hib.dat153.compulsory2.utils.ApplicationUtils;
 import no.hib.dat153.compulsory2.utils.Constants;
 
 /**
@@ -47,28 +49,15 @@ public class ShowPersonActivity extends AppCompatActivity {
         Bundle data = getIntent().getExtras();
 
         String name = data.getString(NAME);
-      /*  SharedPreferences prefs = getSharedPreferences(
-                Constants.PREFERENCES_FILE, Context.MODE_PRIVATE
-        );*/
-        
 
-        /*String a,b;
-        /*String a,b;
-        if((a = prefs.getString(Constants.OWNER,null)) != null) {
-            person = new Person(a, prefs.getString(a,null));
-        } else*/
         Person person = myDB.find(name);
         assert person != null;
-        InputStream stream;
-        try {
-            Uri uri = Uri.parse(person.getUriString());
-            stream = getContentResolver().openInputStream(uri);
-        } catch (Exception e) {
-            throw new Error(e);
-        }
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageOfPerson);
-        imageView.setImageBitmap(BitmapFactory.decodeStream(stream));
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.linearLayoutShowPerson);
+        try {
+            ApplicationUtils.generateImageView(linearLayout, this, person,
+                    R.id.imageOfPerson, 300);
+        } catch(Exception e) { throw new Error(e); }
 
         TextView textView = (TextView) findViewById(R.id.nameOfPerson);
         textView.setText(person.getName());

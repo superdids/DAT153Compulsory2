@@ -105,22 +105,12 @@ public class MainActivity extends AppCompatActivity {
         CANCEL = getString(R.string.galleryCancel);
 
 
-        //SharedPreferences.Editor editor = owner.edit();
-        //editor.clear(); editor.commit();
-
-        if(owner.getString(Constants.OWNER, null) == null) {
+       if(owner.getString(Constants.OWNER, null) == null) {
             startActivity(new Intent(MainActivity.this,
                     AddOwnerActivity.class));
             return;
         } else {
-            FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
-            Person person = ApplicationUtils.getOwner(owner);
-            try {
-                ApplicationUtils.generateOwnerView(frameLayout, getApplicationContext(), person,
-                        new int[]{R.id.mainOwnerImage, R.id.mainOwnerText});
-            } catch (Exception e) {
-                throw new Error(e);
-            }
+            renderOwner();
         }
     }
 
@@ -129,20 +119,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        checkOwnerPermissions();
+       // checkOwnerPermissions();
+        if(ApplicationUtils.getOwner(owner).isNotEmpty()) {
+            renderOwner();
+           // checkOwnerPermissions();
+        } else {
+            Intent intent = new Intent(MainActivity.this, AddOwnerActivity.class);
+            intent.putExtra(Constants.MESSAGE_OWNER_NOT_ADDED, true);
+            startActivity(intent);
+        }
     }
 
     public void checkOwnerPermissions() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if(checkSelfPermission(Manifest.permission.MANAGE_DOCUMENTS)
                     == PackageManager.PERMISSION_GRANTED) {
                 renderOwner();
             } else {
-                if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if(shouldShowRequestPermissionRationale(Manifest.permission.MANAGE_DOCUMENTS)) {
                     String message = getString(R.string.toastWritePermission);
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
-                requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_RW);
+                requestPermissions(new String[] { Manifest.permission.MANAGE_DOCUMENTS }, REQUEST_RW);
             }
         } else {
             renderOwner();
@@ -150,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void renderOwner() {
-        if(ApplicationUtils.getOwner(owner).isNotEmpty()) {
+        //if(ApplicationUtils.getOwner(owner).isNotEmpty()) {
             FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
             Person person = ApplicationUtils.getOwner(owner);
             try {
@@ -159,11 +157,11 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 throw new Error(e);
             }
-        } else {
+        /*} else {
             Intent intent = new Intent(MainActivity.this, AddOwnerActivity.class);
             intent.putExtra(Constants.MESSAGE_OWNER_NOT_ADDED, true);
             startActivity(intent);
-        }
+        }*/
     }
 
     /**
@@ -315,6 +313,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 String message = getString(R.string.permissionNotGranted);
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+               // Toast.makeText(MainActivity.this, results[0], Toast.LENGTH_LONG).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, results);
@@ -401,5 +400,12 @@ public class MainActivity extends AppCompatActivity {
         );
         pathToCapturedPhoto = image.getAbsolutePath();
         return image;
+    }
+
+    public void onResetOwnerClick(View view) {
+        SharedPreferences.Editor editor = owner.edit();
+        editor.clear(); editor.commit();
+        startActivity(new Intent(MainActivity.this,
+                AddOwnerActivity.class));
     }
 }

@@ -25,13 +25,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class MainActivityTest {
 
 
-     //private MainActivity activity;
     @Rule
     public ActivityTestRule mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
-//@Before
-  //public void setup() throws Exception {
-    //activity = getActivity(); // starts the activity with normal lifecycle behaviour
-// }
 
     @Test
     public void testPushingAddButtonNotPromptingDialogUponEmptyInput() {
@@ -74,4 +69,5 @@ public class MainActivityTest {
     private static String getString(int id) {
         return InstrumentationRegistry.getTargetContext().getString(id);
     }
+
 }

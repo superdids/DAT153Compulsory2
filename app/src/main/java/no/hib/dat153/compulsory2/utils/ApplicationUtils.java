@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -150,5 +151,23 @@ public class ApplicationUtils {
 
         TextView textView = (TextView) parent.findViewById(identifications[1]);
         textView.setText(person.getName());
+    }
+
+    public static void generateImageView(View view, Context context, Person person,
+                                         int identification, float scaleBy) throws Exception {
+        ImageView imageView = (ImageView) view.findViewById(identification);
+        Uri uri = Uri.parse(person.getUriString());
+        InputStream stream = context.getContentResolver().openInputStream(uri);
+
+        Bitmap bitmap = BitmapFactory.decodeStream(stream);
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float scaleWidth = (float) width / (float) scaleBy;
+        float scaleHeight = (float) height / (float) scaleBy;
+        float scale = scaleWidth < scaleHeight ? scaleHeight : scaleWidth;
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width / scale),
+                (int) (height / scale), true);
+        imageView.setImageBitmap(bitmap);
     }
 }

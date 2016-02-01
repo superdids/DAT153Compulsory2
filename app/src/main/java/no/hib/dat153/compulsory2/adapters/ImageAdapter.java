@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import no.hib.dat153.compulsory2.R;
 import no.hib.dat153.compulsory2.persistence.ApplicationDatabase;
 import no.hib.dat153.compulsory2.persistence.Person;
+import no.hib.dat153.compulsory2.utils.ApplicationUtils;
 
 /**
  * A custom ArrayAdapter implementation, to render images in a ListView.
+ *
  * @author Didrik Emil Aubert
  * @author Ståle André Mikalsen
  * @author Viljar Buen Rolfsen
@@ -44,8 +46,9 @@ public class ImageAdapter extends ArrayAdapter<Person> {
     /**
      * Constructor assigning values to the field variables and invoking the
      * constructor of the superclass.
-     * @param context The context of the activity initializing an instance of this class.
-     * @param id The id of the ListView.
+     *
+     * @param context    The context of the activity initializing an instance of this class.
+     * @param id         The id of the ListView.
      * @param personList The list which the ListView shall be associated with.
      */
     public ImageAdapter(Context context, int id, ArrayList<Person> personList,
@@ -58,9 +61,10 @@ public class ImageAdapter extends ArrayAdapter<Person> {
 
     /**
      * Renders an image in an entry in the ListView.
+     *
      * @param position The index of the item/person.
-     * @param view The item to be rendered.
-     * @param parent The parent of the item, being the ListView.
+     * @param view     The item to be rendered.
+     * @param parent   The parent of the item, being the ListView.
      * @return The item (modified) to be rendered.
      */
     @Override
@@ -73,30 +77,14 @@ public class ImageAdapter extends ArrayAdapter<Person> {
         }
         Person person = personList.get(position);
         if (person != null) {
-            ImageView imageView = (ImageView) v.findViewById(R.id.listViewImages);
-            if (imageView != null) {
-                InputStream stream;
-                try {
-                    Uri uri = Uri.parse(person.getUriString());
-                    stream = context.getContentResolver().openInputStream(uri);
-
-                    Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                    int width = bitmap.getWidth();
-                    int height = bitmap.getHeight();
-                    float scaleWidth = (float) width / (float) 150;
-                    float scaleHeight = (float) height / (float) 150;
-                    float scale;
-
-                    if (scaleWidth < scaleHeight) scale = scaleHeight;
-                    else scale = scaleWidth;
-
-                    bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width / scale),
-                            (int) (height / scale), true);
-                    imageView.setImageBitmap(bitmap);
-                } catch (Exception e) {
-                    throw new Error(e);
-                }
+            try {
+                ApplicationUtils.generateImageView(v, context, person,
+                        R.id.listViewImages, 150);
+            } catch (Exception e) {
+                throw new Error(e);
             }
+
+
             Button button = (Button) v.findViewById(R.id.deleteImageButton);
             button.setOnClickListener(new View.OnClickListener() {
                                           @Override

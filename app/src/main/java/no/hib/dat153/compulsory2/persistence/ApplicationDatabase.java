@@ -16,6 +16,8 @@ import java.util.ArrayList;
  */
 public class ApplicationDatabase extends SQLiteOpenHelper {
 
+    //TODO update queries to be runned by CursorLoader.loadInBackground().
+    //TODO update queries to manage projections.
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "persons.db";
     private static final String TABLE_PERSONS = "persons";
@@ -71,6 +73,7 @@ public class ApplicationDatabase extends SQLiteOpenHelper {
         cursor.moveToFirst();
         Person ret = null;
         if (!cursor.isAfterLast()) {
+            //TODO change arguments to the field varaible constants (culomns).
             String n = cursor.getString(cursor.getColumnIndex("name"));
             String p = cursor.getString(cursor.getColumnIndex("uriString"));
             if(n != null && p != null)
@@ -128,6 +131,7 @@ public class ApplicationDatabase extends SQLiteOpenHelper {
         cursor.moveToFirst();
         String name, uriString;
         while(!cursor.isAfterLast()) {
+            //TODO change arguments to the field varaible constants (culomns).
             name = cursor.getString(cursor.getColumnIndex("name"));
             uriString = cursor.getString(cursor.getColumnIndex("uriString"));
             if(name != null && uriString != null)

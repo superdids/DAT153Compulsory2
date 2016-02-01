@@ -10,6 +10,7 @@
     tools:context="no.hib.dat153.compulsory2.activities.ShowPersonActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayoutShowPerson"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
