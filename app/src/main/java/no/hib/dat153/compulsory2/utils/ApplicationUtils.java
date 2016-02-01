@@ -144,8 +144,8 @@ public class ApplicationUtils {
         Bitmap bitmap = BitmapFactory.decodeStream(stream);
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        float scaleWidth = (float) width / (float) 150;
-        float scaleHeight = (float) height / (float) 150;
+        float scaleWidth = (float) width / (float) 250;
+        float scaleHeight = (float) height / (float) 250;
         float scale = scaleWidth < scaleHeight ? scaleHeight : scaleWidth;
 
         bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width / scale),

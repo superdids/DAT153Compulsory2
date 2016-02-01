@@ -79,7 +79,7 @@ public class ImageAdapter extends ArrayAdapter<Person> {
         if (person != null) {
             try {
                 ApplicationUtils.generateImageView(v, context, person,
-                        R.id.listViewImages, 150);
+                        R.id.listViewImages, 300);
             } catch (Exception e) {
                 throw new Error(e);
             }

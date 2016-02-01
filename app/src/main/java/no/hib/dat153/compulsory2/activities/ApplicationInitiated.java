@@ -21,13 +21,13 @@ public class ApplicationInitiated extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferences owner = getSharedPreferences(
+        /*SharedPreferences owner = getSharedPreferences(
                 Constants.PREFERENCES_FILE, Context.MODE_PRIVATE
         );
         SharedPreferences.Editor editor = owner.edit();
         editor.clear();
         editor.commit();
         ApplicationDatabase myDB = new ApplicationDatabase(this, null, null, 1);
-        myDB.clearDB();
+        myDB.clearDB();*/
     }
 }
