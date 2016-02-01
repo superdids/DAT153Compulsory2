@@ -37,6 +37,7 @@ import no.hib.dat153.compulsory2.utils.Constants;
 
 /**
  * The class to be considered as the entry point of the application.
+ *
  * @author Didrik Emil Aubert
  * @author Ståle André Mikalsen
  * @author Viljar Buen Rolfsen
@@ -67,18 +68,19 @@ public class MainActivity extends AppCompatActivity {
     /**
      * ID's referring the images in the drawable folder.
      */
-    private int [] drawableIDs = { R.drawable.didrik, R.drawable.staale, R.drawable.viljar };
+    private int[] drawableIDs = {R.drawable.didrik, R.drawable.staale, R.drawable.viljar};
 
     /**
      * Names which shall be associated to the images.
      */
-    private String [] names = { "Didrik", "Ståle", "Viljar" };
+    private String[] names = {"Didrik", "Ståle", "Viljar"};
 
     private SharedPreferences owner;
 
     /**
      * Renders the view and adds drawable resources (if they don't exist in
      * the database).
+     *
      * @param savedInstanceState Information of this activity's previously frozen state.
      */
     @Override
@@ -90,39 +92,42 @@ public class MainActivity extends AppCompatActivity {
 
         Resources resources = getResources();
         Uri uri;
-        for(int x = 0; x < names.length; x++) {
-            if(!myDB.exists(names[x])) {
+        for (int x = 0; x < names.length; x++) {
+            if (!myDB.exists(names[x])) {
                 uri = ApplicationUtils.getResourceById(resources, drawableIDs[x]);
                 myDB.addPerson(new Person(names[x], uri.toString()));
             }
         }
 
+
         owner = getSharedPreferences(
                 Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+
 
         CAMERA = getString(R.string.galleryTakePhoto);
         GALLERY = getString(R.string.galleryChooseFromGallery);
         CANCEL = getString(R.string.galleryCancel);
 
 
-       if(owner.getString(Constants.OWNER, null) == null) {
+        if (owner.getString(Constants.OWNER, null) == null) {
             startActivity(new Intent(MainActivity.this,
                     AddOwnerActivity.class));
             return;
         } else {
-            renderOwner();
+            // renderOwner();
+            checkOwnerPermissions();
         }
     }
-
 
 
     @Override
     protected void onRestart() {
         super.onRestart();
-       // checkOwnerPermissions();
-        if(ApplicationUtils.getOwner(owner).isNotEmpty()) {
+        // checkOwnerPermissions();
+        if (ApplicationUtils.getOwner(owner).isNotEmpty()) {
             renderOwner();
-           // checkOwnerPermissions();
+            // checkOwnerPermissions();
         } else {
             Intent intent = new Intent(MainActivity.this, AddOwnerActivity.class);
             intent.putExtra(Constants.MESSAGE_OWNER_NOT_ADDED, true);
@@ -131,16 +136,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkOwnerPermissions() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.MANAGE_DOCUMENTS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 renderOwner();
             } else {
-                if(shouldShowRequestPermissionRationale(Manifest.permission.MANAGE_DOCUMENTS)) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     String message = getString(R.string.toastWritePermission);
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                 }
-                requestPermissions(new String[] { Manifest.permission.MANAGE_DOCUMENTS }, REQUEST_RW);
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_RW);
             }
         } else {
             renderOwner();
@@ -148,20 +153,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void renderOwner() {
-        //if(ApplicationUtils.getOwner(owner).isNotEmpty()) {
-            FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
-            Person person = ApplicationUtils.getOwner(owner);
-            try {
-                ApplicationUtils.generateOwnerView(frameLayout, getApplicationContext(), person,
-                        new int[]{R.id.mainOwnerImage, R.id.mainOwnerText});
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        /*} else {
-            Intent intent = new Intent(MainActivity.this, AddOwnerActivity.class);
-            intent.putExtra(Constants.MESSAGE_OWNER_NOT_ADDED, true);
-            startActivity(intent);
-        }*/
+        FrameLayout frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+        Person person = ApplicationUtils.getOwner(owner);
+        try {
+            ApplicationUtils.generateOwnerView(frameLayout, getApplicationContext(), person,
+                    new int[]{R.id.mainOwnerImage, R.id.mainOwnerText});
+        } catch (Exception e) {
+            throw new Error(e);
+        }
     }
 
     /**
@@ -170,29 +169,29 @@ public class MainActivity extends AppCompatActivity {
      * respectively. The "Add Person" button will also invoke invoke
      * this method, but will use existing activities before resuming to
      * MainActivity.
+     *
      * @param view The item which has been clicked.
      */
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.names :
+            case R.id.names:
                 startActivity(new Intent(this, NamesActivity.class));
                 break;
-            case R.id.images :
+            case R.id.images:
                 startActivity(new Intent(this, ImagesActivity.class));
                 break;
-            case R.id.learn :
+            case R.id.learn:
                 ArrayList<Person> list = myDB.fetchAll();
-                if(list.size() == 0) {
+                if (list.size() == 0) {
                     String message = getResources().getString(R.string.toastEmptyLearn);
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                }
-                else
+                } else
                     startActivity(new Intent(this, LearnActivity.class));
                 break;
-            case R.id.addPerson :
+            case R.id.addPerson:
                 addMember();
                 break;
-            default :
+            default:
                 break;
         }
     }
@@ -207,10 +206,10 @@ public class MainActivity extends AppCompatActivity {
     private void addMember() {
         EditText editText = (EditText) findViewById(R.id.personName);
         String name = editText.getText().toString();
-        if(name.equals("")) {
+        if (name.equals("")) {
             String message = getResources().getString(R.string.toastEnterName);
             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        } else if(myDB.exists(name)) {
+        } else if (myDB.exists(name)) {
             String messageA = getResources().getString(R.string.toastTheName);
             String messageB = getResources().getString(R.string.toastIsTaken);
             String message = messageA + name + messageB;
@@ -228,15 +227,15 @@ public class MainActivity extends AppCompatActivity {
     public void showImageOptions() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
 
-        final String [] OPTIONS = { CAMERA, GALLERY, CANCEL };
+        final String[] OPTIONS = {CAMERA, GALLERY, CANCEL};
         alertDialog.setTitle(getString(R.string.galleryAddPhoto));
         alertDialog.setItems(OPTIONS, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(which >= 0 && which < OPTIONS.length) {
+                if (which >= 0 && which < OPTIONS.length) {
                     switch (which) {
-                        case 0 :
+                        case 0:
 
                             //Versions at or above API level 23 (Marshmallow) require runtime permissions
                             //Relevant permissions include CAMERA and WRITE_EXTERNAL.
@@ -250,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                                         String message = getResources().getString(R.string.toastCameraPermission);
                                         Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
                                     }
-                                    if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                    if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                                         String message = getResources().getString(R.string.toastWritePermission);
                                         Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
                                     }
@@ -268,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                             //The application crashes with permission denial (MANAGE_DOCUMENTS)
                             //if the API level is at or above 19 (KitKat). No luck with declaring
                             //the permission in AndroidManifest.xml and requesting permission
-                            if(Build.VERSION.SDK_INT < 19) {
+                            if (Build.VERSION.SDK_INT < 19) {
                                 galleryIntent = new Intent();
                                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
                                 galleryIntent.setType("image/*");
@@ -291,15 +290,16 @@ public class MainActivity extends AppCompatActivity {
     /**
      * The device receives information of whether requested permissions have been
      * granted or not by the user.
+     *
      * @param requestCode Identifier in case the application has to request different
      *                    permissions at different places within a single activity.
      * @param permissions Permissions requested by the user
-     * @param results Whether a permission has been granted or not by the user.
+     * @param results     Whether a permission has been granted or not by the user.
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String [] permissions, @NonNull int [] results) {
-        if(requestCode == REQUEST_CAMERA_RW) {
-            if(results.length == 2
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] results) {
+        if (requestCode == REQUEST_CAMERA_RW) {
+            if (results.length == 2
                     && results[0] == PackageManager.PERMISSION_GRANTED
                     && results[1] == PackageManager.PERMISSION_GRANTED) {
                 initiateCamera();
@@ -307,13 +307,13 @@ public class MainActivity extends AppCompatActivity {
                 String message = getResources().getString(R.string.permissionNotGranted);
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
             }
-        } else if(requestCode == REQUEST_RW) {
-            if(results.length == 1 && results[0] == PackageManager.PERMISSION_GRANTED) {
+        } else if (requestCode == REQUEST_RW) {
+            if (results.length == 1 && results[0] == PackageManager.PERMISSION_GRANTED) {
                 renderOwner();
             } else {
                 String message = getString(R.string.permissionNotGranted);
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-               // Toast.makeText(MainActivity.this, results[0], Toast.LENGTH_LONG).show();
+                // Toast.makeText(MainActivity.this, results[0], Toast.LENGTH_LONG).show();
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, results);
@@ -322,26 +322,29 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * The MainActivity will be resumed after an image capture / gallery pick.
+     *
      * @param requestCode Whether an image was captured by a camera application
      *                    or chosen from the image gallery.
-     * @param resultCode Whether the result was successful or not.
-     * @param data The data of the image (if chosen from gallery), passed as
-     *             an intent.
+     * @param resultCode  Whether the result was successful or not.
+     * @param data        The data of the image (if chosen from gallery), passed as
+     *                    an intent.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK
+        if (resultCode != RESULT_OK
                 || (requestCode != TAKE_PHOTO && requestCode != PICK_IMAGE))
             return;
         Uri selectedImage;
-        if(requestCode == TAKE_PHOTO) {
+        if (requestCode == TAKE_PHOTO) {
             File file = new File(pathToCapturedPhoto);
             try {
                 ExifInterface exif = new ExifInterface(file.getPath());
                 ApplicationUtils.rotate(exif, file);
-            } catch(Exception e) { throw new Error(e); }
+            } catch (Exception e) {
+                throw new Error(e);
+            }
 
             selectedImage = Uri.fromFile(file);
             //Makes the image available in the gallery.
@@ -384,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Creates a file at the external storage.
+     *
      * @return An empty JPEG file.
      * @throws IOException If the creation was unsuccessful.
      */
@@ -404,7 +408,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onResetOwnerClick(View view) {
         SharedPreferences.Editor editor = owner.edit();
-        editor.clear(); editor.commit();
+        editor.clear();
+        editor.commit();
         startActivity(new Intent(MainActivity.this,
                 AddOwnerActivity.class));
     }

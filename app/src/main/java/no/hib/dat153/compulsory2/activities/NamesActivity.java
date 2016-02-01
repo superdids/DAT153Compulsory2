@@ -64,7 +64,7 @@ public class NamesActivity extends AppCompatActivity {
             try {
                 FrameLayout frameLayout = (FrameLayout) findViewById(R.id.nameFrameLayout);
                 ApplicationUtils.generateOwnerView(frameLayout, getApplicationContext(), owner,
-                        new int [] { R.id.nameOwnerImagePicture, R.id.nameOwnerImageText} );
+                        new int [] { R.id.nameOwnerImagePicture, R.id.nameOwnerImageText});
             } catch(Exception e) { throw new Error(e); }
         }
 

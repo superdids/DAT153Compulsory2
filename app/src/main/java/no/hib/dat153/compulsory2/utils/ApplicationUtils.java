@@ -2,6 +2,7 @@ package no.hib.dat153.compulsory2.utils;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -9,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -134,6 +136,7 @@ public class ApplicationUtils {
      */
     public static void generateOwnerView(FrameLayout parent, Context context, Person person,
                                          int [] identifications) throws Exception {
+
         ImageView imageView = (ImageView) parent.findViewById(identifications[0]);
         Uri uri = Uri.parse(person.getUriString());
         InputStream stream = context.getContentResolver().openInputStream(uri);
