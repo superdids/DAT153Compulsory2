@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Compulsory2v1</string>
+    <string name="app_name">Who</string>
     <string name="names">Names</string>
     <string name="images">Images</string>
     <string name="learn">Learn mode</string>
@@ -14,7 +14,7 @@
     <string name="galleryChooseFromGallery">Choose from Gallery</string>
     <string name="galleryCancel">Cancel</string>
     <string name="toMain">Back to home screen</string>
-    <string name="delete">Delete person</string>
+    <string name="delete">Delete</string>
     <string name="toastEmptyLearn">Nothing to learn</string>
     <string name="toastEnterName">Please enter a name</string>
     <string name="toastTheName">The name" "</string>
