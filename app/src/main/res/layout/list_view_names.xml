@@ -8,14 +8,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/buttonText" />
+        android:textColor="@color/primaryText" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delete"
+        android:textColor="@color/accentTextIcon"
         android:id="@+id/deleteNameButton"
-        android:background="@color/buttonColor"
+        android:background="@color/red"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

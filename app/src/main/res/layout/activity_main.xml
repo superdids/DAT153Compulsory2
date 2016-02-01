@@ -3,51 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".activities.MainActivity">
 
+
+    <FrameLayout
+        android:id="@+id/mainFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/mainOwnerImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left" />
+
+        <TextView
+            android:id="@+id/mainOwnerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/button"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="#FFFFFF"
+            android:onClick="onResetOwnerClick"
+            android:text="Change"
+            android:textColor="@color/colorAccent" />
+
+    </FrameLayout>
+
     <LinearLayout
+        android:id="@+id/LinearLayoutButtons_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/addPersonRelativeLayout"
+        android:layout_below="@+id/mainFrameLayout"
+        android:layout_centerInParent="true"
+        android:background="@color/accentTextIcon"
+        android:gravity="bottom"
         android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/mainFrameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            >
-
-            <ImageView
-                android:id="@+id/mainOwnerImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
-
-            <TextView
-                android:id="@+id/mainOwnerText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/buttonText"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:background="@color/buttonColor"
-                android:onClick="onResetOwnerClick"
-                android:text="Change"
-                android:textColor="@color/buttonText"
-                android:textSize="10sp" />
-
-
-        </FrameLayout>
 
 
         <Button
@@ -56,10 +59,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10sp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/buttonColor"
             android:onClick="onClick"
             android:text="@string/names"
-            android:textColor="@color/buttonText"
+            android:textColor="@color/accentTextIcon"
             android:textSize="20sp" />
 
         <Button
@@ -69,10 +72,10 @@
             android:layout_below="@id/names"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10sp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/buttonColor"
             android:onClick="onClick"
             android:text="@string/images"
-            android:textColor="@color/buttonText"
+            android:textColor="@color/accentTextIcon"
             android:textSize="20sp" />
 
         <Button
@@ -82,21 +85,23 @@
             android:layout_below="@id/images"
             android:layout_gravity="center_horizontal"
             android:layout_margin="10sp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/buttonColor"
             android:onClick="onClick"
             android:text="@string/learn"
-            android:textColor="@color/buttonText"
+            android:textColor="@color/accentTextIcon"
             android:textSize="20sp" />
 
     </LinearLayout>
 
     <RelativeLayout
+
         android:id="@+id/addPersonRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
         android:padding="10dp">
@@ -108,7 +113,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@color/buttonText"
+            android:background="@color/accentTextIcon"
             android:ems="10"
             android:hint="@string/enterName"
             android:inputType="textPersonName"
@@ -121,10 +126,10 @@
             android:layout_alignBottom="@+id/personName"
             android:layout_toEndOf="@+id/personName"
             android:layout_toRightOf="@+id/personName"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:onClick="onClick"
             android:text="@string/addPerson"
-            android:textColor="@color/buttonText" />
+            android:textColor="@color/accentTextIcon" />
 
 
     </RelativeLayout>

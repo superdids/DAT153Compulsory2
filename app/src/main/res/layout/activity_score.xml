@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/toMain"
                 android:background="@color/buttonColor"
-                android:textColor="@color/buttonText"
+                android:textColor="@color/accentTextIcon"
                 android:id="@+id/backToMainScreen"
                 android:onClick="onClick"
                 android:layout_alignParentBottom="true"

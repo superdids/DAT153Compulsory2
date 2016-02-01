@@ -303,6 +303,7 @@ public class AddOwnerActivity extends AppCompatActivity {
         if (valid()) {
             errorMessage.setVisibility(View.INVISIBLE);
             submit.setVisibility(View.VISIBLE);
+            findViewById(R.id.ownerAdd).setVisibility(View.INVISIBLE);
         }
     }
 

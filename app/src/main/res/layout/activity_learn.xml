@@ -3,10 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="no.hib.dat153.compulsory2.activities.LearnActivity">
 
     <LinearLayout
@@ -63,7 +59,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="bottom">
 
             <EditText
                 android:layout_width="wrap_content"
@@ -80,7 +76,7 @@
                 android:text="@string/submit"
                 android:id="@+id/learnButton"
                 android:background="@color/buttonColor"
-                android:textColor="@color/buttonText"
+                android:textColor="@color/accentTextIcon"
                 android:layout_weight="1"
                 android:onClick="onClick" />
         </LinearLayout>
@@ -93,27 +89,14 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/toMain"
-                android:id="@+id/learnBackToMain"
-                android:background="@color/buttonColor"
-                android:textColor="@color/buttonText"
-                android:onClick="backToMainScreen"
-                android:layout_gravity="bottom"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/buttonScore"
                 android:id="@+id/showScore"
                 android:background="@color/buttonColor"
-                android:textColor="@color/buttonText"
+                android:textColor="@color/accentTextIcon"
                 android:onClick="onClick"
-                android:layout_above="@+id/learnBackToMain"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"/>
         </RelativeLayout>
 
     </LinearLayout>
