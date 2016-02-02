@@ -76,7 +76,7 @@
         android:visibility="invisible"
         android:textColor="@color/red"
         android:id="@+id/ownerError"
-        android:layout_below="@+id/ownerName"
+        android:layout_above="@+id/ownerName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

@@ -46,19 +46,27 @@ import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.junit.Assert.assertEquals;
 
 
+/**
+ * Testing the add person use-case.
+ * @author Didrik Emil Aubert
+ * @author Viljar Buen Rolfsen
+ * @author Ståle André Mikalsen
+ */
 @RunWith(AndroidJUnit4.class)
-//Test b is dependent of test a.
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UseCaseAddPerson {
 
     private Instrumentation.ActivityResult activityResult;
     //Assuming ''Ole'' is not existing in the database.
     private String name = "Ole";
+    private static final int [] pos = new int[1];
 
     @Rule
     public ActivityTestRule mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
@@ -115,21 +123,8 @@ public class UseCaseAddPerson {
     @Test
     public void cOpenImagesAndCheckNewImage() {
         onView(withId(R.id.images)).perform(click());
-        final int [] pos = new int[1];
 
-
-        onView(withId(R.id.imageListView)).check(matches(new TypeSafeMatcher<View>() {
-            @Override
-            protected boolean matchesSafely(View item) {
-                pos[0] = ((ListView) item).getCount() - 1;
-                return true;
-            }
-
-            @Override
-            public void describeTo(Description description) {
-                //Do nothing.
-            }
-        }));
+        onView(withId(R.id.imageListView)).check(matches(callbacks));
 
         onData(anything()).inAdapterView(allOf(withId(R.id.imageListView)))
                 .atPosition(pos[0]).perform(click());
@@ -144,8 +139,36 @@ public class UseCaseAddPerson {
         onView(withText(name)).check(doesNotExist());
     }
 
+    @Test
+    public void eRemoveAllEntriesAndVerifyNothingToClick() {
+        onView(withId(R.id.images)).perform(click());
+
+        //final int [] pos = new int[1];
+        for(int x = 0; x < 3; x++) {
+            onView(withId(R.id.imageListView)).check(matches(callbacks));
+            onData(anything()).inAdapterView(allOf(withId(R.id.imageListView),
+                    hasSibling(withText(R.string.delete))))
+                   .atPosition(pos[0]).perform(click());
+            //onView(allOf(withId(R.id.imageListView), hasSibling(withText(R.string.delete)))
+        }
+        onView(withId(R.id.imageListView)).check(matches(callbacks));
+        assertEquals(pos[0], -1);
+    }
 
     private static String getString(int id) {
         return InstrumentationRegistry.getTargetContext().getString(id);
     }
+
+    private Matcher<View> callbacks = new TypeSafeMatcher<View>() {
+        @Override
+        protected boolean matchesSafely(View item) {
+            pos[0] = ((ListView) item).getCount() - 1;
+            return true;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            //Do nothing.
+        }
+    };
 }
