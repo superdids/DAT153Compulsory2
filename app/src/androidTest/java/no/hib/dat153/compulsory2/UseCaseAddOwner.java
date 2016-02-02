@@ -5,126 +5,121 @@ import android.app.Instrumentation;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.intent.rule.IntentsTestRule;
+import android.support.test.espresso.intent.Intents;
+import android.support.test.rule.ActivityTestRule;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.text.Editable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import no.hib.dat153.compulsory2.activities.AddOwnerActivity;
+import no.hib.dat153.compulsory2.activities.MainActivity;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
+import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.hasSibling;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.test.ViewAsserts.assertOnScreen;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
 
-/**
- * Created by Didrik on 2/1/2016.
- */
-public class UseCaseAddOwner extends ActivityInstrumentationTestCase2<AddOwnerActivity> {
 
-    private AddOwnerActivity addOwnerActivity;
+@RunWith(AndroidJUnit4.class)
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class UseCaseAddOwner {
+
+
+    // Den truen på slutten der var litt kul. Da starter den ikke Activitien hver gang. Ish.
     @Rule
-    public IntentsTestRule<AddOwnerActivity> intentsRule = new IntentsTestRule<>(AddOwnerActivity.class);
-
-    public UseCaseAddOwner() {
-        super(AddOwnerActivity.class);
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        addOwnerActivity = getActivity();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
-   /* @SmallTest
-    public void testAddOwner() {
-
-        String input = "Hans";
-
-
-        onView(withId(R.id.ownerName)).perform(typeText(input), closeSoftKeyboard());
-
-        //Button button = (Button) addOwnerActivity.findViewById(R.id.ownerAdd);
-        EditText editText = (EditText) addOwnerActivity.findViewById(R.id.ownerName);
-        assertEquals(editText.getText().toString(), input);
-
-        onView(withId(R.id.ownerAdd)).perform(click());
-
-        String takePhoto = getString(R.string.galleryTakePhoto);
-
-
-        Intent resultData = new Intent();
-        File f = null;
-        try {
-            f = createImageFile();
-        } catch(Exception e) { }
-        resultData.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-        Instrumentation.ActivityResult result = new Instrumentation.ActivityResult(
-                11, resultData
-        );
-
-        intending(toPackage("com.android.camera2")).respondWith(result);
-
-        onView(withText(takePhoto)).perform(click());
-
-        intended(toPackage("com.android.camera2"));
-
-        onData(allOf(withId(R.id.deleteNameButton)))
-                .atPosition(3).perform(click());
-
-        //TouchUtils.clickView(this, button);
-
-        //editText.clearComposingText();
-        //TouchUtils.tapView(this, editText);
-        //getInstrumentation().waitForIdleSync();
-        //sendKeys("My Name");
-        // getInstrumentation().waitForIdleSync();
-
-        // assertEquals("My Name", editText.getText().toString());
-    }
+    public ActivityTestRule mainActivityTestRule = new ActivityTestRule<>(MainActivity.class, true, true);
+    private Instrumentation.ActivityResult activityResult;
+    private String name = "Snoopey";
 
     private static String getString(int id) {
         return InstrumentationRegistry.getTargetContext().getString(id);
-    }*/
+    }
+
+    @Before
+    public void setupImageUri() {
+        Resources resources = InstrumentationRegistry.getTargetContext().getResources();
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + resources
+                .getResourcePackageName(
+                        R.mipmap.ic_launcher) + '/' + resources.getResourceTypeName(
+                R.mipmap.ic_launcher) + '/' + resources.getResourceEntryName(
+                R.mipmap.ic_launcher));
+        Intent resultData = new Intent();
+        resultData.setData(imageUri);
+        activityResult = new Instrumentation.ActivityResult(
+                Activity.RESULT_OK, resultData);
+    }
+
+    @Test
+    public void aPressChangeCheckNewWindow() {
+
+        assertNotNull(withId(R.id.button));
+        onView(withId(R.id.button)).perform(click());
+    }
+
+    @Test
+    public void bEnterNameAndAddPhotoAndButtonApearsAndSubmit() {
+
+        onView(withId(R.id.ownerName)).perform(typeText(name), closeSoftKeyboard());
 
 
+        onView(withId(R.id.ownerAdd)).perform(click());
 
+        String chooseFromGallery = getString(R.string.galleryChooseFromGallery);
+        setupImageUri();
+
+        Intents.init();
+        Matcher<Intent> expectedIntent = allOf(hasAction(Intent.ACTION_OPEN_DOCUMENT));
+        intending(expectedIntent).respondWith(activityResult);
+
+        onView(withText(chooseFromGallery)).perform(click());
+        intended(expectedIntent);
+        Intents.release();
+
+        onView(withId(R.id.ownerSubmit)).check(matches(isDisplayed()));
+        // tenkte egentlig å ha denne i den neste testen. Men det funket ikke så bra gitt
+        onView(withId(R.id.ownerSubmit)).perform(click());
+    }
+
+    @Test
+    public void cCheckThatNameWasSaved() {
+
+        assertNotNull(withText(name));
+
+    }
 }
